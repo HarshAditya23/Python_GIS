@@ -9,7 +9,7 @@ start_date = '2018-01-01'
 end_date = '2020-01-01'
 
 # Band selection and filtering
-temp = temp.select('LST_Day_1km', 'QC_Day').filterDate(start_date, end_date)
+temp = temp.select('LST_Night_1km', 'QC_Day').filterDate(start_date, end_date)
 
 urban_lon = 77.219159
 urban_lat = 28.627522
