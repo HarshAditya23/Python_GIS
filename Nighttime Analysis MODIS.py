@@ -7,7 +7,6 @@ ee.Initialize()
 temp = ee.ImageCollection('MODIS/006/MOD11A1')
 start_date = '2018-01-01'
 end_date = '2020-01-01'
-
 # Band selection and filtering
 temp = temp.select('LST_Night_1km', 'QC_Day').filterDate(start_date, end_date)
 

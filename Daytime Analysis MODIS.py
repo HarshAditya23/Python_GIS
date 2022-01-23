@@ -1,22 +1,34 @@
 # Earth Engine Library
 import ee
+from temperature import transform
+from temperature import temperture_conversion
 # Library Initialization
 ee.Initialize()
 
+
 # Data Selection
-temp = ee.ImageCollection('MODIS/006/MOD11A1')
-start_date = '2018-01-01'
-end_date = '2020-01-01'
+Temp = ee.ImageCollection('MODIS/006/MOD11A1')
+Start_date = '2018-01-01'
+End_date = '2020-01-01'
 
 # Band selection and filtering
-temp = temp.select('LST_Day_1km', 'QC_Day').filterDate(start_date, end_date)
+Temp = Temp.select('LST_Day_1km', 'QC_Day').filterDate(Start_date, End_date)
 
-urban_lon = 77.219159
-urban_lat = 28.627522
+Urban_lon = 77.219159
+Urban_lat = 28.627522
 # Point of Interest Urban
-urban_poi = ee.Geometry.Point(urban_lon, urban_lat)
+Urban_poi = ee.Geometry.Point(Urban_lon, Urban_lat)
 
-rural_lon = 77.480755
-rural_lat = 28.851537
+Rural_lon = 77.480755
+Rural_lat = 28.851537
 # Point of Interest Rural
-rural_poi = ee.Geometry.Point(rural_lon, rural_lat)
+Rural_poi = ee.Geometry.Point(Rural_lon, Rural_lat)
+# Resolution in meters
+
+Scale = 1000
+
+Urban_df = transform(Urban_poi, ['LST_Day_1km'])
+Rural_df = transform(Rural_poi, ['LST_Day_1km'])
+
+Urban_df['LST_Day_1km'] = Urban_df['LST_Day_1km'].apply(temperture_conversion)
+Rural_df['LST_Day_1km'] = Rural_df['LST_Day_1km'].apply(temperture_conversion)
