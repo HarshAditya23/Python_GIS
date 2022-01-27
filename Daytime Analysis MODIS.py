@@ -8,9 +8,9 @@ Created on Thu Jan 27 18:18:13 2022
 import ee
 from temperature import transform
 from temperature import temperture_conversion
+from temperature import utfvi_calculation
 # Library Initialization
 ee.Initialize()
-
 
 # Data Selection
 Temp = ee.ImageCollection('MODIS/006/MOD11A1')
@@ -51,11 +51,11 @@ print('Maximum daytime LST at Urban POI:', round(Urban_poi * 0.02 - 273.15, 2),
 
 # Mean, Min and Max temperature of Rural POI
 Rural_mean = Temp.mean().sample(Rural_poi, Scale).first(
-        ).get('LST_Day_1km').getinfo()
+        ).get('LST_Day_1km').getInfo()
 Rural_min = Temp.mean().sample(Rural_poi, Scale).first(
-        ).get('LST_Day_1km').getinfo()
+        ).get('LST_Day_1km').getInfo()
 Rural_max = Temp.mean().sample(Rural_poi, Scale).first(
-        ).get('LST_Day_1km').getinfo()
+        ).get('LST_Day_1km').getInfo()
 
 # Temperature in degree celcius
 print('Mean daytime LST at Rural POI:', round(Rural_poi * 0.02 - 273.15, 2),
@@ -65,8 +65,19 @@ print('Minimum daytime LST at Rural POI:', round(Rural_poi * 0.02 - 273.15, 2),
 print('Maximum daytime LST at Rural POI:', round(Rural_poi * 0.02 - 273.15, 2),
       '°C')
 
+Urban_df = Temp.getRegion(Urban_poi, Scale).getInfo()
+Rural_df = Temp.getRegion(Rural_poi, Scale).getInfo()
+
 Urban_df = transform(Urban_poi, ['LST_Day_1km'])
 Rural_df = transform(Rural_poi, ['LST_Day_1km'])
 
 Urban_df['LST_Day_1km'] = Urban_df['LST_Day_1km'].apply(temperture_conversion)
 Rural_df['LST_Day_1km'] = Rural_df['LST_Day_1km'].apply(temperture_conversion)
+
+Urban_df['UTFVI'] = Urban_df['LST_Day_1km'].apply(utfvi_calculation)
+Rural_df['UTFVI'] = Rural_df['LST_Day_1km'].apply(utfvi_calculation)
+
+# Urban data to csv
+Urban_df.to_csv('data_urban.csv', index=False)
+# Rural data to csv
+Rural_df.to_csv('data_rural.csv', index=False)

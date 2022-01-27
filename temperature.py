@@ -16,3 +16,8 @@ def transform(region, n_bands):
 def temperture_conversion(t_modis):
     t_celsius = 0.02 * t_modis - 273.15
     return t_celsius
+
+
+def utfvi_calculation(cal_fx):
+    for i in cal_fx:
+        cal_fx = (cal_fx - cal_fx.mean()) / cal_fx.mean()
