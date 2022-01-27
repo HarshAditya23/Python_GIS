@@ -6,6 +6,9 @@ Created on Thu Jan 27 18:18:13 2022
 
 # Earth Engine Library
 import ee
+import requests
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
 from temperature import transform
 from temperature import temperture_conversion
 from temperature import utfvi_calculation
@@ -81,3 +84,18 @@ Rural_df['UTFVI'] = Rural_df['LST_Day_1km'].apply(utfvi_calculation)
 Urban_df.to_csv('data_urban.csv', index=False)
 # Rural data to csv
 Rural_df.to_csv('data_rural.csv', index=False)
+
+lst_img = Temp.mean()
+lst_img = lst_img.select('LST_Day_1km').multiply(0.02)
+lst_img = lst_img.select('LST_Day_1km').add(-273.15)
+roi = Urban_poi.buffer(1e6)
+# Heat map for daytime
+url = lst_img.getThumbUrl({'min': 10, 'max': 30, 'dimensions': 512,
+                           'palette': ['blue', 'yellow', 'orange', 'red']})
+
+response = requests.get("url")
+file = open("image.png", "wb")
+file.write(response.content)
+file.close()
+
+plt.imshow(mpimg.imread('image.png'))
