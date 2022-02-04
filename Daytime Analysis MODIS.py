@@ -85,6 +85,12 @@ Urban_df.to_csv('data_urban.csv', index=False)
 # Rural data to csv
 Rural_df.to_csv('data_rural.csv', index=False)
 
+fig, ax = plt.subplots(figsize=(14, 6))
+ax.scatter(Urban_df['datetime'], Urban_df['LST_Day_1km'],
+           c='black', alpha=0.2, label='Urban (data)')
+ax.scatter(Rural_df['datetime'], Rural_df['LST_Day_1km'],
+           c='green', alpha=0.35, label='Rural (data)')
+
 lst_img = Temp.mean()
 lst_img = lst_img.select('LST_Day_1km').multiply(0.02)
 lst_img = lst_img.select('LST_Day_1km').add(-273.15)
