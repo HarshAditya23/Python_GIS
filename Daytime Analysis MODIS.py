@@ -32,8 +32,8 @@ Rural_lon = 77.480755
 Rural_lat = 28.851537
 # Point of Interest Rural
 Rural_poi = ee.Geometry.Point(Rural_lon, Rural_lat)
-# Resolution in meters
 
+# Resolution in meters
 Scale = 1000
 
 # Mean, Min and Max temperature of Urban POI
